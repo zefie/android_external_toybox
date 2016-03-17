@@ -211,8 +211,16 @@ LOCAL_CFLAGS += -DTOYBOX_VERSION='"$(toybox_version)"'
 
 LOCAL_CLANG := true
 
-LOCAL_SHARED_LIBRARIES := libcutils libselinux
+LOCAL_MODULE := libtoybox
+common_cflags := $(LOCAL_CFLAGS)
+include $(BUILD_STATIC_LIBRARY)
 
+include $(CLEAR_VARS)
+LOCAL_SRC_FILES := main.c
+LOCAL_STATIC_LIBRARIES := libtoybox
+LOCAL_SHARED_LIBRARIES := libcutils libselinux
+LOCAL_CFLAGS := $(common_cflags)
+LOCAL_CLANG := true
 LOCAL_MODULE := toybox
 
 # dupes: dd df du ls mount renice
@@ -341,4 +349,20 @@ ALL_TOOLS := \
 # Install the symlinks.
 LOCAL_POST_INSTALL_CMD := $(hide) $(foreach t,$(ALL_TOOLS),ln -sf toybox $(TARGET_OUT)/bin/$(t);)
 
+include $(BUILD_EXECUTABLE)
+
+# static executable
+include $(CLEAR_VARS)
+LOCAL_SRC_FILES := main.c
+LOCAL_CFLAGS := $(common_cflags)
+LOCAL_CLANG := true
+LOCAL_UNSTRIPPED_PATH := $(PRODUCT_OUT)/symbols/utilities
+LOCAL_MODULE := toybox_static
+LOCAL_MODULE_CLASS := UTILITY_EXECUTABLES
+LOCAL_MODULE_PATH := $(PRODUCT_OUT)/utilities
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE_STEM := toybox
+LOCAL_STATIC_LIBRARIES := libc libtoybox libcutils libselinux libmincrypt
+LOCAL_FORCE_STATIC_EXECUTABLE := true
+LOCAL_PACK_MODULE_RELOCATIONS := false
 include $(BUILD_EXECUTABLE)
