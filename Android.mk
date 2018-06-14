@@ -144,7 +144,6 @@ common_SRC_FILES := \
     toys/pending/modprobe.c \
     toys/pending/more.c \
     toys/pending/setfattr.c \
-    toys/pending/tar.c \
     toys/pending/tr.c \
     toys/pending/traceroute.c \
     toys/posix/basename.c \
@@ -368,7 +367,6 @@ ALL_TOOLS := \
     sysctl \
     tac \
     tail \
-    tar \
     taskset \
     tee \
     time \
